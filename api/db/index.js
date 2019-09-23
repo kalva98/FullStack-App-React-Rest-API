@@ -9,7 +9,7 @@ console.info('Instantiating and configuring the Sequelize object instance...');
 const options = {
     dialect: 'sqlite',
     storage: 'fsjstd-restapi.db',
-
+    
 };
 
 const sequelize = new Sequelize(options);

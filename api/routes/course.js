@@ -4,10 +4,7 @@ const dbmodule = require('../db')
 const models = dbmodule.models
 const bcryptjs = require('bcryptjs');
 const auth = require('basic-auth');
-const {
-    Courses,
-    Users
-} = models
+const { Courses, Users } = models
 
 const authenticateUser = async (req, res, next) => {
     let message;
@@ -63,23 +60,23 @@ const authenticateUser = async (req, res, next) => {
 
 //GET/api/courses200
 //Returns a list of courses (including the user that owns each course)
-router.get('/courses', async (req, res) => {
-    const courses = await Courses.findAll({
+ router.get('/courses', async(req, res) => {
+     const courses = await Courses.findAll({
         attributes: {
             exclude: ['createAt', 'updateAt'],
         },
         include: [{
-            model: Users,
-            as: 'user',
-            attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
-        }]
-    })
-    res.json(courses)
-})
+        model: Users,
+        as: 'user',
+        attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
+         }]
+        })
+         res.json(courses)
+       })
 
 //GET/api/courses/:id 200
 //Returns a course (including the user that owns the course) for the provided course ID      
-router.get('/courses/:id', async (req, res, next) => {
+router.get('/courses/:id', async(req,res, next) => {
     const course = await Courses.findOne({
         where: {
             id: req.params.id
@@ -97,17 +94,17 @@ router.get('/courses/:id', async (req, res, next) => {
 //POST/api/courses 201
 //Creates a course, sets the Location header to the URI for the course, and returns no content
 router.post('/courses', authenticateUser, async (req, res, next) => {
-    try {
-        if (req.body.title && req.body.description) {
-            const createCourse = await Courses.create(req.body);
-            res.location(`api/courses/${createCourse.id}`);
-            res.status(201).end();
-        } else {
+    try{
+        if(req.body.title && req.body.description) {
+        const createCourse = await Courses.create(req.body);
+        res.location(`api/courses/${createCourse.id}`);
+        res.status(201).end();
+        }else{
             res.status(400).json({
                 message: 'Error 400 - Bad request - Missing information.',
             });
         }
-    } catch (err) {
+    }catch (err) {
         console.log("Error 401 - Unauthorized Request");
         next(err);
     }
@@ -124,26 +121,20 @@ router.put('/courses/:id', authenticateUser, async (req, res) => {
                     req.body.materialsNeeded === req.body.materialsNeeded
                 await course.update(req.body);
                 res.status(204).end();
-            } else {
-                res.status(400).json({
-                    message: 'Missing Information'
-                });
-            }
         } else {
-            res.status(403).json({
-                message: "You are not authorized to make changes."
-            });
+                res.status(400).json({ message: 'Missing Information' });
         }
-    } catch (error) {
-        if (error.name === 'SequelizeValidationError') {
-            res.status(404).json({
-                error: error.message
-            })
-
-        } else {
-            return next(error)
-
-        }
+    } else {
+        res.status(403).json({ message: "You are not authorized to make changes." });
+    }
+} catch (error) {
+    if (error.name === 'SequelizeValidationError') {
+        res.status(404).json({ error: error.message })
+        
+    } else {
+        return next(error)
+        
+    }
     }
 });
 
@@ -154,7 +145,7 @@ router.delete('/courses/:id', authenticateUser, async (req, res, next) => {
         const course = await Courses.findByPk(req.params.id)
         if (course) {
             await course.destroy();
-
+            
         } else {
             res.status(404).end();
         }
@@ -163,6 +154,6 @@ router.delete('/courses/:id', authenticateUser, async (req, res, next) => {
         return next(error)
     }
 })
-
+        
 
 module.exports = router;
