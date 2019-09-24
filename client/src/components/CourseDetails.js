@@ -80,11 +80,10 @@ class CourseDetails extends Component {
                 </div> 
             </div> 
         </div> 
-    )}
     </div>
     )
-        }
-    }
+}
+}
      
     
 

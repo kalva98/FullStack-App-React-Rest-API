@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 class CreateCourse extends Component {
     state={
-        title: "",
-        decscription: "",
-        materialsNeeded: '',
+        title: '',
+        decscription: '',
         estimatedTime: '',
+        materialsNeeded: '',
     };
 
     render() {
@@ -15,7 +15,6 @@ class CreateCourse extends Component {
         <h1>Create Course</h1>
         <div>
           <div>
-              if()
             <h2 className="validation--errors--label">Validation errors</h2>
             <div className="validation-errors">
               <ul>
@@ -29,7 +28,7 @@ class CreateCourse extends Component {
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
                 <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
-                    value=""/></div>
+                  value=""/></div>
                 <p></p>
               </div>
               <div className="course--description">

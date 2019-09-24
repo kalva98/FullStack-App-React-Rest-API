@@ -6,6 +6,7 @@ import './App.css';
 import Header from './components/Header';
 import CourseDetails from './components/CourseDetails';
 import CreateCourse from './components/CreateCourse';
+import UpdateCourse from './components/UpdateCourse';
 
 export default class App extends Component{
 
@@ -19,6 +20,7 @@ export default class App extends Component{
             <Route key={0} exact path="/" component={Courses} />
             <Route path="/courses/:id" component={CourseDetails}/>
             <Route path= "/course/create" component={CreateCourse}/>
+            <Route path= {`/course/:id/update`} component={UpdateCourse}/>
           </Switch>
         </BrowserRouter>
       </div>
