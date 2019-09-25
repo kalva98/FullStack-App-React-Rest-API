@@ -23,7 +23,7 @@ submit = () => {
     const { context } = this.props;
     const { from } = this.props.location.state || { from: { pathname: '/' } }; //If a user submits the sign in form without previously visiting a protected route, they will navigate to /authenticated by default
     const { emailAddress, password } = this.state;
-    context.actions.signIn(emailAddress, password)
+  context.actions.signIn(emailAddress, password)
     .then(user => {
       if (user === null) {
         this.setState(() => {

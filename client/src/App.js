@@ -33,9 +33,9 @@ export default class App extends Component{
         <HeaderWithContext/>
           <Switch>
             <Route exact path="/" component={CoursesWithContext} />
-            <PrivateRoute path="/courses/:id" component={CourseDetailsWithContext}/>
+            <Route path="/courses/:id" component={CourseDetailsWithContext}/>
             <PrivateRoute path= "/course/create" component={CreateCourseWithContext}/>
-            <Route path= {`/course/:id/update`} component={UpdateCourseWithContext}/>
+            <PrivateRoute path= {`/course/:id/update`} component={UpdateCourseWithContext}/>
             <Route path= "/signin" component={UserSignInWithContext}/>
             <Route path= "/signup" component={UserSignUpWithContext}/>
             <Route path= "/signout" component={UserSignOutWithContext}/>

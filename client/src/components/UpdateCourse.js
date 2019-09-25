@@ -32,6 +32,36 @@ class UpdateCourse extends Component {
       })
   }
 
+  submit = () => {
+    const { context } = this.props;
+    //Sets the
+    //const userId = context.authenticatedUser.id;
+    // declares variables so save from writing this.state.* everywhere
+    const { title, description, estimatedTime, materialsNeeded } = this.state;
+    // Declares and fills course variable object
+    const course = { title, description, estimatedTime, materialsNeeded };
+    // Grabs credentials to authorize user in update request
+    const credentials = JSON.parse(localStorage.getItem('user'));
+    context.data.updateCourse(course, credentials.authData, this.state.id)
+      .then(errors => {
+        //Checks for validation errors and sets them if they exist
+        if(errors.length) {
+          this.setState({ errors });
+        } else if(errors === 500){
+          // Redirects user to error page if 500 error is returned
+          this.props.history.push('/error');
+        } else {
+          // If no errors or 500 error, the course will be updated and user will be redirected to home page
+          this.props.history.push('/');
+          console.log('Course successfully updated!');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.props.history.push('/error');
+      });
+    }
+
   render() {
     const course = this.state.courses;
     if (course.id === undefined)
