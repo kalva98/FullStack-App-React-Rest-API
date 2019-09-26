@@ -63,7 +63,7 @@ class CourseDetails extends Component {
                             </div> 
                         </div>
                         <div className="grid-25 grid-right">
-                    <div classname = "course--stats">
+                    <div className = "course--stats">
                         <ul className = "course--stats--list">
                             <li className = "course--stats--list--item">
                                 <h4> Estimated Time </h4>
