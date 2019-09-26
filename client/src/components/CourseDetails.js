@@ -32,7 +32,26 @@ class CourseDetails extends Component {
             })
         }
 
+delete = async (e) => {
+    e.preventDefault();
+    const { context } = this.props;
+    const authUser = context.authenticatedUser;
+    let password = prompt("Please enter your password to confirm this action");
 
+    axios.delete('http://localhost:5000/api/courses/' + this.props.match.params.id,{
+        method : 'DELETE',
+        auth: {
+            username: `${authUser.emailAddress}`,
+            password: password
+        },
+    } ).then(() => {
+        this.props.history.push("/");
+    })
+        .catch(err => {
+            console.log(err);
+            this.props.history.push("/error");
+        });
+}
 
     render() {
         const course = this.state.courses;
