@@ -7,7 +7,7 @@ class UpdateCourse extends Component {
   constructor() {
     super();
     this.state = {
-      course: {},
+      course: [],
       id: "",
       title: "",
       description: "",
@@ -17,21 +17,7 @@ class UpdateCourse extends Component {
       lastName: ""
     }
   }
-  componentDidMount() {
-
-    axios.get('http://localhost:5000/api/courses/' + this.props.match.params.id)
-      .then(response => {
-        this.setState({
-          courses: response.data,
-          id: this.props.match.params.id
-        })
-      })
-      .catch(error => {
-        if (error.status === 404) {
-          console.log('Error not found')
-        }
-      })
-  }
+  
 
   change = (event) => {
     const name = event.target.name;
@@ -45,7 +31,7 @@ class UpdateCourse extends Component {
   }
 
   submit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const { context } = this.props;
     //Sets the
     //const userId = context.authenticatedUser.id;
@@ -58,7 +44,7 @@ class UpdateCourse extends Component {
     const password = authUser.password;
     // Grabs credentials to authorize user in update request
     const credentials = btoa(`${emailAddress}:` + password);
-    context.data.updateCourse(course, credentials.authUser)
+    context.data.updateCourse(course, credentials, authUser)
       
         //Checks for validation errors and sets them if they exist
         if(course.description === '' || course.title === '') {
@@ -87,7 +73,7 @@ class UpdateCourse extends Component {
         }
         
       }).then(() => {
-        alert("Course updated successfully");
+        alert("Yay, Course updated successfully");
         this.props.history.push("/");
       }).catch(err => {
         if (err.response.status === 400) {
@@ -102,17 +88,33 @@ class UpdateCourse extends Component {
     }
   }
 
+  componentDidMount() {
+
+    axios.get('http://localhost:5000/api/courses/' + this.props.match.params.id)
+      .then(response => {
+        this.setState({
+          courses: response.data,
+          id: this.props.match.params.id
+        })
+      })
+      .catch(error => {
+        if (error.status === 404) {
+          console.log('Error not found')
+        }
+      })
+  }
+
   render() {
     const course = this.state.courses;
     const {context} = this.props;
     const authUser = context.authenticatedUser;
     
-    if (course.id === undefined)
-        return (<div></div>)
-    else
+    if (course !== undefined)   {
+          console.log(course);
     return (
+      
       <div>
-        <div className="bounds course--detail">
+        <div key={course.id} className="bounds course--detail">
             <h1>Update Course</h1>
             <div>
               <form onSubmit= {this.submit}>
@@ -124,8 +126,9 @@ class UpdateCourse extends Component {
                     <p>{course.user.firstName} {course.user.lastName}</p>
                   </div>
                   <div className="course--description">
-                    <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={course.description}> onChange={this.change} />
-                    </textarea></div>
+                    <div><textarea id="description"  name="description" className="" placeholder="course description" value={course.description} onChange={this.change}> </textarea></div>
+                    
+                    
                   </div>
                 </div>
                 <div className="grid-25 grid-right">
@@ -145,7 +148,7 @@ class UpdateCourse extends Component {
                 </div>
                 <div className="grid-100 pad-bottom">
                   {(authUser && authUser.id === course.user.id) &&
-                  <button className="button" type="submit" onClick = {this.submit}>Update Course</button>}
+                  <button className="button" type="submit" onClick={this.submit}>Update Course</button>}
                   <Link className="button button-secondary" to={'/courses/' + this.props.match.params.id}>Cancel</Link>
                 </div>
               </form>
@@ -153,7 +156,9 @@ class UpdateCourse extends Component {
           </div>
         </div>
 
-    )
+    )}
+    else{
+    return ( <div> Object is undefined.... </div>) }
   }
 }
 

@@ -104,6 +104,4 @@ delete = async (e) => {
 }
 }
      
-    
-
 export default CourseDetails
