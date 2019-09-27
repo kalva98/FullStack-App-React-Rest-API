@@ -6,10 +6,8 @@ class UpdateCourse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleError: "",
-            descriptionError: "",
             courses: [],
-            // errors: []
+            errors: []
         }
     }
 
