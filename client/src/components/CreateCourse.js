@@ -43,7 +43,7 @@ class CreateCourse extends React.Component {
       })
       return;
     } else if (res.status === 401 || res.status === 403) {     
-        window.location.href = '/forbidden';
+        window.location.href = '/';
     } else {
         window.location.href = '/error';    
     }
@@ -54,7 +54,8 @@ class CreateCourse extends React.Component {
       title,
       description,
       estimatedTime,
-      materialsNeeded
+      materialsNeeded,
+      
     } = this.state;
 
     const { context } = this.props;

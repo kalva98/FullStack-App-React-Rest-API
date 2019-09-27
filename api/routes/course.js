@@ -93,7 +93,7 @@ router.get('/courses/:id', async(req,res, next) => {
 
 //POST/api/courses 201
 //Creates a course, sets the Location header to the URI for the course, and returns no content
-router.post('/courses', authenticateUser, async (req, res, next) => {
+router.post('/courses', async (req, res, next) => {
     try{
         if(req.body.title && req.body.description) {
         const createCourse = await Courses.create(req.body);
@@ -112,44 +112,42 @@ router.post('/courses', authenticateUser, async (req, res, next) => {
 
 //PUT/api/courses/:id 204
 //Updates a course and returns no content
-router.put('/courses/:id', authenticateUser, async (req, res) => {
+router.put('/courses/:id', async (req, res, next) => {
     try {
         const course = await Courses.findByPk(req.params.id)
-        if (course.id === req.body.id) {
-            if (req.body.title && req.body.description) {
-                req.body.estimatedTime === req.body.estimatedTime &&
-                    req.body.materialsNeeded === req.body.materialsNeeded
-                await course.update(req.body);
-                res.status(204).end();
-        } else {
-                res.status(400).json({ message: 'Missing Information' });
+       
+            if (course.title === "" && course.description === "") {
+                // req.body.estimatedTime === req.body.estimatedTime &&
+                //     req.body.materialsNeeded === req.body.materialsNeeded
+                    res.status(400).json({ message: 'Missing Information' })
+                
+    } else { course.update(req.body);
+            res.status(204).end();
+                
         }
-    } else {
-        res.status(403).json({ message: "You are not authorized to make changes." });
-    }
-} catch (error) {
-    if (error.name === 'SequelizeValidationError') {
-        res.status(404).json({ error: error.message })
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError') {
+        res.status(403).json({ error: error.message })
         
-    } else {
+        } else {
         return next(error)
         
-    }
+        }
     }
 });
 
 //DELETE/api/courses/:id 204
 //Deletes a course and returns no content     
-router.delete('/courses/:id', authenticateUser, async (req, res, next) => {
+router.delete('/courses/:id', async (req, res, next) => {
     try {
         const course = await Courses.findByPk(req.params.id)
         if (course) {
             await course.destroy();
-            
+            res.status(204).end();
         } else {
             res.status(404).end();
         }
-        res.status(204).end();
+        
     } catch (error) {
         return next(error)
     }

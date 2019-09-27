@@ -34,7 +34,7 @@ class Courses extends Component {
             return (
                 <div>
                     {courses.map(course =>
-                        <div className="grid-33" >
+                        <div key={course.id}  className="grid-33" >
                             <Link className="course--module course--link"
                                 to={`/courses/${course.id}`}>
                                 <h4 className="course--label">Course</h4>
