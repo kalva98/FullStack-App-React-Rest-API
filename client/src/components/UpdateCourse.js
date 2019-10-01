@@ -1,3 +1,5 @@
+//Component to update course
+
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -10,7 +12,7 @@ class UpdateCourse extends React.Component {
             errors: []
         }
     }
-
+//Function to handle inputs
     change = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -22,9 +24,11 @@ class UpdateCourse extends React.Component {
         });
     }
 
+    //handle submit function
     submit = async (e) => {
         e.preventDefault();
         const { context } = this.props;
+        const course = this.state;
         const authUser = context.authenticatedUser;
         const authUserId = authUser.id;
         const emailAddress = authUser.emailAddress;
@@ -32,24 +36,34 @@ class UpdateCourse extends React.Component {
 
         const data = this.state;
         data.userId = authUserId;
+//Alert message if title or description not filled out completly
+        if (course.description === '' || course.title === '') {
+            this.setState({
+                errors: ['Course and Description are required']
+            })
+            alert("Please fill out missing information")
+        }
+        else{
 
-        
+//If information filled in correctly, course will update
         const res = await context.data.api(`/courses/${this.props.match.params.id}`, "PUT", data, true, { emailAddress, password });
         if (res.status === 204) {
             alert("Course updated successfully")
-            window.location.href = `/courses/${this.props.match.params.id}`;
+            window.location.href = '/';
         } else if (res.status === 400) {
             this.setState({
-                errors: ['Make sure all required fields are filled out!']
+                errors: ['Required fields (title and description) need to be filled out!']
             })
             return;
         } else if (res.status === 401 || res.status === 403) {
-            window.location.href = '/';
+            window.location.href = '/forbidden';
         } else {
             window.location.href = '/error';
         }
     }
+}
 
+//Get api with id
     componentDidMount() {
         axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
             .then(response => {

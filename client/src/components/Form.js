@@ -9,6 +9,7 @@ export default (props) => {
     elements,
   } = props;
 
+  //handle submit function
   function handleSubmit(event) {
     event.preventDefault();
     submit();
@@ -19,6 +20,7 @@ export default (props) => {
     cancel();
   }
 
+  //handle error and display
   return (
     <div>
       <ErrorsDisplay errors={errors} />

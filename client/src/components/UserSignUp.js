@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
 
-export default class UserSignUp extends Component {
+
+class UserSignUp extends Component {
   state = {
     firstName: '',
     lastName: '',
@@ -10,9 +11,10 @@ export default class UserSignUp extends Component {
     password: '',
     confirmPassword: '',
     errors: []
+    
   }
 
-
+//change function
   change = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -24,7 +26,7 @@ export default class UserSignUp extends Component {
     });
   }
 
-
+  //handle submit function
   submit = () => {
     const { context } = this.props;
 
@@ -36,24 +38,34 @@ export default class UserSignUp extends Component {
       confirmPassword
     } = this.state;
 
+    
+    let user ={};
 
-    const user = {
-      firstName,
-      lastName,
-      emailAddress,
-      password,
-    };
-
+    if (firstName === '' || lastName === '' || emailAddress === '' || password === '' || confirmPassword === '') {
+        this.setState({
+          errors: ['One or more fields are missing information, please fill out all fields']
+        })
+        return;
+    }
 
     if (password !== confirmPassword) {
-      this.setState(() => {
-        return { errors: ['Passwords must match'] }
+      this.setState({
+        errors: ['Passwords must match'] 
       })
+
     } else {
-      context.data.createUser(user)
-        .then(errors => {
-          if (errors.length) {
-            this.setState({ errors });
+        user = {
+        firstName,
+        lastName,
+        emailAddress,
+        password,
+    };
+  }
+
+  context.data.createUser(user)
+        .then(res => {
+          if (res.status === 500) {
+            this.props.history.push('/error');
           } else {
             context.actions.signIn(emailAddress, password)
               .then(() => {
@@ -61,19 +73,21 @@ export default class UserSignUp extends Component {
               });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
-          this.props.history.push('/error');
-        });
-    }
+          this.setState({
+          errors: ['This email is already in use.']
+        })
+    });
   }
+  
 
-
+//cancel button
   cancel = () => {
     this.props.history.push('/');
   }
 
-
+//displays page
   render() {
     const {
       firstName,
@@ -82,7 +96,7 @@ export default class UserSignUp extends Component {
       password,
       confirmPassword,
       errors
-    } = this.state
+    } = this.state;
 
     return (
       <div className="bounds">
@@ -133,12 +147,12 @@ export default class UserSignUp extends Component {
                     onChange={this.change} />
                 </React.Fragment>
               )} />
-            <p>
-              Already have a user account? <Link to="/signin">Click here</Link> to sign in!
-            </p>
+            <p> Already have a user account? <Link to="/signin">Click here</Link> to sign in! </p>
           </div>
         </div>
-      </div>
-    )
+        </div>
+      );
+    }
   }
-}
+
+export default UserSignUp;

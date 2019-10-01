@@ -9,6 +9,7 @@ class UserSignIn extends React.Component {
         errors:[],
     }
 
+
 change = (event) => {
   const name = event.target.name;
   const value = event.target.value;
@@ -18,10 +19,10 @@ change = (event) => {
     };
   });
 }
-
+//submit function signs in user
 submit = () => {
     const { context } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' } }; //If a user submits the sign in form without previously visiting a protected route, they will navigate to /authenticated by default
+    const { from } = this.props.location.state || { from: { pathname: '/' } }; 
     const { emailAddress, password } = this.state;
   context.actions.signIn(emailAddress, password)
     .then(user => {
@@ -30,8 +31,8 @@ submit = () => {
           return { errors: ["Sign-in was unsuccessful"] };
         });
       } else {
-        this.props.history.push(from); //The from variable passed to history.push(from) contains information about the pathname an unauthenticated user redirected "from" (via this.props.location.state). For example, if a user redirects to the sign up page from /settings, from will be equal to pathname: "/settings".
-        console.log(`SUCCESS! ${emailAddress} is now signed in!`); // Same as in UserSignUp
+        this.props.history.push(from); 
+        console.log(`SUCCESS! ${emailAddress} is now signed in!`); 
       }
     }).catch(err => {
       console.log(err);
@@ -62,7 +63,7 @@ render() {
       </div>
       )
     }
-        
+//Takes you back to home page
     cancel = ()=> {
           this.props.history.push("/");
     }

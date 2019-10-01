@@ -49,6 +49,7 @@ class CreateCourse extends React.Component {
     }
   }
 
+  //Display how page will be displayed
   render() {
     const {
       title,

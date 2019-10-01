@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import NotFound from './NotFound';
 
+//set state of course which shows courses on home page
 class Courses extends Component {
     state = { courses: [] }
     getCourses = () => {
@@ -23,11 +24,12 @@ class Courses extends Component {
             })
         }
         
-
+//Gets api
     componentDidMount() {
         this.getCourses()
     }
-        
+
+//Renders page to be shown
     render() {
         const { courses } = this.state;
         if (courses.length > 0) {
